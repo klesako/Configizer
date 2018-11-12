@@ -18,8 +18,7 @@ namespace ConfigizerLib.Compilation.Xml
             sb.AppendLine("base.Apply();");
             foreach (var action in doc.Actions)
             {
-                var detokenize = action as Detokenize;
-                if (detokenize != null)
+                if (action is Detokenize detokenize)
                 {
                     foreach (var path in detokenize.Paths.Split(',', ';'))
                     {
@@ -28,7 +27,7 @@ namespace ConfigizerLib.Compilation.Xml
                 }
             }
             sb.AppendLine("}");
-            
+
             return base.CreateConfigClassCode(sb.ToString(), className, baseClassName, @abstract, isLeaf, nsImports);
         }
 
@@ -36,7 +35,7 @@ namespace ConfigizerLib.Compilation.Xml
         {
             if (p.IsFromFile)
                 return GetPublicVirtualStringPropertySnippet(p.Name, "GetFileContent", p.File);
-         
+
             return GetPublicVirtualStringPropertySnippet(p.Name, p.GetValue());
         }
     }

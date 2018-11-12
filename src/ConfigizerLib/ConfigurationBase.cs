@@ -39,19 +39,4 @@ namespace ConfigizerLib
 
         public virtual void Apply() { }
     }
-
-
-    //class DealToTradeServiceProcessor
-    //{
-    //    void Process(object deal)
-    //    {
-            
-    //    }
-    //}
-
-
-    //static class TradeEvents
-    //{
-    //    void
-    //}
 }

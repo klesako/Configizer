@@ -7,7 +7,7 @@ namespace ConfigizerLib
 {
     public static class ObjectExtensions
     {
-        const BindingFlags ParamsBindingFlags = BindingFlags.IgnoreCase | BindingFlags.Instance |
+        private const BindingFlags ParamsBindingFlags = BindingFlags.IgnoreCase | BindingFlags.Instance |
                                   BindingFlags.NonPublic | BindingFlags.Public;
 
         public static object GetParamValue(this object o, string paramName, object defaultValue = null)
@@ -32,13 +32,15 @@ namespace ConfigizerLib
                     if (defaultValue != null)
                         value = defaultValue;
                     else
-                        throw new KeyNotFoundException(paramName);
+                    {
+                        var msg = $"Parameter '{paramName}' not found in configuration";
+                        throw new KeyNotFoundException(msg);
+                    }
                 }
             }
-            
+
             // if value we got is string let's interpolate it
-            var s = value as string;
-            if (s != null)
+            if (value is string s)
                 return o.Interpolate(s, defaultValue as string);
 
             return value;
@@ -46,11 +48,11 @@ namespace ConfigizerLib
 
         public static string Interpolate(this object source, string s, string defaultValue = null)
         {
-            return Regex.Replace(s, @"\$\{(.+?)\}", delegate(Match match)
+            return Regex.Replace(s, @"\$\{(.+?)\}", delegate (Match match)
             {
                 var paramExpr = match.Groups[1].Value;
                 var paramNameAndFormatArr = paramExpr.Split(':');
-                
+
                 var paramName = paramNameAndFormatArr[0];
                 var paramFormat = string.Join(":", paramNameAndFormatArr.Skip(1));
                 var paramValue = source.GetParamValue(paramName, defaultValue);
@@ -61,5 +63,6 @@ namespace ConfigizerLib
                 var format = "{0:" + paramFormat + "}";
                 return string.Format(format, paramValue);
             });
-        }}
+        }
+    }
 }

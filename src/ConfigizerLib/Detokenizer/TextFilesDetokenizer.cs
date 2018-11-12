@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace ConfigizerLib.Detokenizer
 {
-    static public class TextFilesDetokenizer
+    public static class TextFilesDetokenizer
     {
-        public static Func<string[], Func<string, string>> RemoveExtensionOutputFileNameSelector =
-            extensionsToRemove => delegate(string inputFileName)
+        public static readonly Func<string[], Func<string, string>> RemoveExtensionOutputFileNameSelector =
+            extensionsToRemove => delegate (string inputFileName)
             {
                 var ext = Path.GetExtension(inputFileName) ?? string.Empty;
                 if (string.Empty != ext && extensionsToRemove.Contains(ext))
@@ -15,16 +15,17 @@ namespace ConfigizerLib.Detokenizer
                         inputFileName.Remove(inputFileName.LastIndexOf(ext, StringComparison.InvariantCultureIgnoreCase));
 
                 return inputFileName;
-            }; 
+            };
 
         public static void Detokenize(object tokensSource,
-            string baseDir, string[] paths, 
+            string baseDir, string[] paths,
             string[] fileNameSearchPatterns, Func<string, string> outputFileNameSelctor,
             bool forceOverwriteIfReadonly = true)
         {
             var files = new FilesEnumerator(paths, fileNameSearchPatterns, baseDir).GetFileNames();
             foreach (var fileName in files)
             {
+                Console.WriteLine($"  Processing file {fileName} ... ");
                 var outputFileName = outputFileNameSelctor(fileName);
 
                 var outputFileExists = File.Exists(outputFileName);
@@ -36,7 +37,7 @@ namespace ConfigizerLib.Detokenizer
                 var detokenizedContents = tokensSource.Interpolate(fileContents);
 
                 // writes to the file if content has changed - idea is to avoid unnecessarily touching files which can lead e.g. to unnecessary recompilation performed by MSBuild
-                if(!outputFileExists || fileContents != detokenizedContents)
+                if (!outputFileExists || fileContents != detokenizedContents)
                     File.WriteAllText(outputFileName, detokenizedContents);
             }
         }

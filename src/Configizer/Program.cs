@@ -16,6 +16,7 @@ namespace Configizer
         /// <param name="overridenParams">List of overiding parameters in format p1=val2;p2=val2;...</param>
         public static void Apply(string cfgPath, string[] overridenParams = null)
         {
+            Console.WriteLine($"  Configuration path {cfgPath}");
             var cfgInfo = ConfigurationLoader.Load(cfgPath);
             IConfigurationCompiler compiler;
             switch (cfgInfo.Language)

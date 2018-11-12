@@ -52,7 +52,11 @@
   <ItemGroup>
     <None Include="app\Web.config.token">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
+    <Content Include="config\base.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="config\base.csconfig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

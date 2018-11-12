@@ -1,0 +1,18 @@
+﻿#lang xml
+
+<Configuration
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <Parameters>
+        <P Name="Environment" Value="dev" />
+        <P Name="ErrorPagesEnabled" Value="false" />
+        <P Name="DbPassword" Value="HelloPass" />
+        <P Name="DbConnString" Value="user id=User1;password=Pass1;data sourceServer1;initial catalog=Database1" />
+
+        <P Name="DeliveryMethod" Value="SpecifiedPickupDirectory" />
+        <P Name="PickupDirectoryLocation" Value="d:\Temp\Action\Email\" />
+    </Parameters>
+    <Actions>
+        <Detokenize Paths="..\" TokenPrefix="%%" TokenSuffix="%%"/>
+    </Actions>
+</Configuration>
