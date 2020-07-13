@@ -37,8 +37,17 @@ namespace ConfigizerLib.Detokenizer
                 var detokenizedContents = tokensSource.Interpolate(fileContents);
 
                 // writes to the file if content has changed - idea is to avoid unnecessarily touching files which can lead e.g. to unnecessary recompilation performed by MSBuild
-                if (!outputFileExists || fileContents != detokenizedContents)
+                if (outputFileExists)
+                {
+                    var outputFileContents = File.ReadAllText(outputFileName);
+
+                    if (outputFileContents != detokenizedContents)
+                        File.WriteAllText(outputFileName, detokenizedContents);
+                }
+                else
+                {
                     File.WriteAllText(outputFileName, detokenizedContents);
+                }
             }
         }
     }
